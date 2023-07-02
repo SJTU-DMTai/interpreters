@@ -6,7 +6,7 @@
 - 股票价格数据（CSI300, Alpha360）：https://drive.google.com/file/d/19KGqsdH0ARn3ihNwPZj5sqM1zhGoVv4X/view?usp=sharing
 
 ## 获取解释
-给定股票和时间获取解释，参考`[src/run_explain.py](https://github.com/SJTU-Quant/interpreters/blob/56e5be8a804ed39af1b5aa38b05c7b157ba8634d/src/run_explain.py#L175)`中的`run_one_test()`。
+给定股票和时间获取解释，参考[src/run_explain.py](https://github.com/SJTU-Quant/interpreters/blob/56e5be8a804ed39af1b5aa38b05c7b157ba8634d/src/run_explain.py#L175)中的`run_one_test()`。
 
 ## 测试
 - 测试脚本
