@@ -1,10 +1,3 @@
-
-# git clone https://github.com/SJTU-Quant/qlib.git
-#cd qlib
-# python setup.py develop
-
-#cd examples/benchmarks/Graphs_dgl
-
 echo "============================= 对RSR的预测结果进行解释 ============================="
 python run_ts_dgl.py --data_root "/home/zhangzexi/.qlib/qlib_data/" \
                       --ckpt_root "/data/dengjiale/qlib_exp/tmp_ckpt/" \
