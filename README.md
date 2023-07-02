@@ -2,6 +2,9 @@
 
 ## 数据获取
 
+- 图数据：[SJTU-Quant/graph_data: 包含我们的数据以及从数据爬取到使用的代码 (github.com)](https://github.com/SJTU-Quant/graph_data)
+- 股票价格数据（CSI300, Alpha360）：https://drive.google.com/file/d/19KGqsdH0ARn3ihNwPZj5sqM1zhGoVv4X/view?usp=sharing
+
 ## 获取解释
 给定股票和时间获取解释，参考`src/run_explain.py`中的`run_one_test()`。
 

@@ -65,10 +65,10 @@ def init_logger(log_dir, args):
 
 def get_model(args, dataset, device):
     with open(
-            '/home/jiale/.qlib/qlib_data/handler_mix_csi300_rankTrue_alpha360_horizon1.pkl',
+            f'{args.data_root}/dataframe_mix_csi300_rankTrue_alpha360_horizon1.pkl',
             'rb') as f:
-        handler = pickle.load(f)
-    rel_encoding, stock_name_list = load_graph(args.market, args.relation_type, handler._data)
+        data_mix = pickle.load(f)
+    rel_encoding, stock_name_list = load_graph(args.market, args.relation_type, data_mix['data'])
     model = Graphs(graph_model=args.graph_model,  # 'GAT' or 'simpleHGN', 'RSR'
                    d_feat=6, hidden_size=64, num_layers=1, loss="mse", dropout=0.7, n_epochs=100,
                    metric="loss", base_model="LSTM", use_residual=True, GPU=args.gpu, lr=1e-4,
@@ -92,7 +92,7 @@ def get_dataset():
     test_start_date = '2017-01-01'
     test_end_date = '2022-12-31'
 
-    with open('/home/jiale/.qlib/qlib_data/dataframe_mix_csi300_rankTrue_alpha360_horizon1.pkl', 'rb') as f:
+    with open(f'{args.data_root}/dataframe_mix_csi300_rankTrue_alpha360_horizon1.pkl', 'rb') as f:
         df_mix = pickle.load(f)
     dataset = DatasetH(df_mix, train_start_date, train_end_date, valid_start_date,
                        valid_end_date, test_start_date, test_end_date)
