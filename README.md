@@ -12,9 +12,9 @@
 - 测试脚本
 	- 直接运行`./eval_explanation.sh`
 	- `src/run_expain.py` 为测试入口，其输入参数为：
-	    - `--data_root` 为存放股票数据（包括图数据和价格数据）的路径 ，注意最好使用绝对路径；
-	    - `--ckpt_root` 为存放模型参数的路径，如 `"/home/jiale/tmp_ckpt/"` ，注意最好使用绝对路径；
-	    - `--result_root` 为存放解释结果的路径，如 `"/home/jiale/results/"` ，注意最好使用绝对路径；
+	    - `--data_root` 为存放股票数据（包括图数据和价格数据）的路径 ，最好使用绝对路径；
+	    - `--ckpt_root` 为存放模型参数的路径，如 `"/home/jiale/tmp_ckpt/"` ，最好使用绝对路径；
+	    - `--result_root` 为存放解释结果的路径，如 `"/home/jiale/results/"` ，最好使用绝对路径；
 	    - `--market` 为所需要测试的股票市场名称，支持 `"A_share"` （cn_data）；
 	    - `--relation_type` 为所需要测试的关系图的类型，支持 `"stock-stock"`；
 	    - `--graph_model` 为需要测试的图神经网络模型的类型，支持`"RSR"`、`"GAT"`以及`"simpleHGN"`；
