@@ -2,7 +2,7 @@
 
 ## 数据获取
 
-- 图数据：https://drive.google.com/drive/folders/1O6ymt2UzMVNYgtf028ebwya06KevQS_n?usp=sharing
+- 图数据：https://drive.google.com/file/d/1P1cjJsumxy274mb7HkV4Nk7STwFCAowD/view?usp=sharing
 - 股票价格数据（CSI300, Alpha360）：https://drive.google.com/file/d/19KGqsdH0ARn3ihNwPZj5sqM1zhGoVv4X/view?usp=sharing
 
 ## 获取解释
