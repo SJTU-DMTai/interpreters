@@ -67,7 +67,7 @@ def get_model(args, dataset, device):
     with open(
             f'{args.data_root}/dataframe_mix_csi300_rankTrue_alpha360_horizon1.pkl',
             'rb') as f:
-        data_mix = pickle.load(f)
+        data_mix= pickle.load(f)
     rel_encoding, stock_name_list = load_graph(args.market, args.relation_type, data_mix['data'])
     model = Graphs(graph_model=args.graph_model,  # 'GAT' or 'simpleHGN', 'RSR'
                    d_feat=6, hidden_size=64, num_layers=1, loss="mse", dropout=0.7, n_epochs=100,
@@ -127,18 +127,18 @@ def eval_explanation(explainer, explainer_name, sparsity, step_size):
 def parse_args():
     parser = argparse.ArgumentParser(description="Explanation evalaation.")
     parser.add_argument("--data_root", type=str, default="/home/jiale/.qlib/qlib_data/", help="graph_data root path")
-    parser.add_argument("--ckpt_root", type=str, default="/home/jiale/qlib_exp/tmp_ckpt/", help="ckpt root path")
-    parser.add_argument("--result_root", type=str, default="/home/jiale/qlib_exp/results/",
+    parser.add_argument("--ckpt_root", type=str, default="/home/jiale/interpreters/tmp_ckpt/", help="ckpt root path")
+    parser.add_argument("--result_root", type=str, default="/home/jiale/interpreters/results/",
                         help="explanation resluts root path")
     parser.add_argument("--market", type=str, default="A_share",
                         choices=["A_share"], help="market name")
     parser.add_argument("--relation_type", type=str, default="stock-stock",
                         choices=["stock-stock", "industry", "full"], help="relation type of graph")
-    parser.add_argument("--graph_model", type=str, default="simpleHGN",
+    parser.add_argument("--graph_model", type=str, default="RSR",
                         choices=["RSR", "GAT", "simpleHGN"], help="graph moddel name")
     parser.add_argument("--graph_type", type=str, default="heterograph",
                         choices=["heterograph", "homograph"], help="graph type")
-    parser.add_argument("--gpu", type=int, default=0, help="gpu number")
+    parser.add_argument("--gpu", type=int, default=-1, help="gpu number")
     args = parser.parse_args()
     return args
 
@@ -176,26 +176,27 @@ def run_one_test():
     '''
     get explanations for stocks in a given time period
     '''
-    # stocks = ['SH600000', 'SH600004', ]
-    stocks = None
+    stocks = ['SH600000', ]
+    # stocks = None
     start_time = '2017-01-02'
     end_time = '2017-01-05'
 
     xpath_explainer = xPath(graph_model=args.graph_type, num_layers=1, device=device)
-    attn_explainer = AttentionX(graph_model=args.graph_type, num_layers=1, device=device)
-    subagraphx_explainer = SubgraphXExplainer(graph_model=args.graph_type, num_layers=1, device=device)
+    # attn_explainer = AttentionX(graph_model=args.graph_type, num_layers=1, device=device)
+    # subagraphx_explainer = SubgraphXExplainer(graph_model=args.graph_type, num_layers=1, device=device)
 
-    explanation = model.get_one_explanation(dataset, stocks, start_time, end_time, attn_explainer, top_k=3)
+    explanation = model.get_one_explanation(dataset, stocks, start_time, end_time, xpath_explainer, top_k=3)
+
     return explanation
 
 
 if __name__ == '__main__':
     args = parse_args()
-    device = torch.device("cuda:" + str(args.gpu) if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda:%d" % (args.gpu) if torch.cuda.is_available() and args.gpu >= 0 else "cpu")
 
     dataset = get_dataset()
     model = get_model(args, dataset, device)
 
-    # run_one_test()
-    run_all_test()
+    run_one_test()
+    # run_all_test()
 

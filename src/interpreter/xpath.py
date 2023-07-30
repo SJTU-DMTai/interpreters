@@ -95,8 +95,8 @@ class xPath(GraphExplainer):
                 sg_edges[etp][0].pop(del_id)
                 sg_edges[etp][1].pop(del_id)
             #print(f'adding {new_edges[etp][0]}->{new_edges[etp][1]}')
-            sg_edges[etp][0] += new_edges[etp][0]
-            sg_edges[etp][1] += new_edges[etp][1]
+            # sg_edges[etp][0] += new_edges[etp][0]
+            # sg_edges[etp][1] += new_edges[etp][1]
             sg_edges[etp] = (sg_edges[etp][0], sg_edges[etp][1])
 
         #print('proxy graph edges:', sg_edges)
@@ -157,8 +157,8 @@ class xPath(GraphExplainer):
             sg_edges[0].pop(del_id)
             sg_edges[1].pop(del_id)
             #print(f'adding {new_edges[etp][0]}->{new_edges[etp][1]}')
-        sg_edges[0] += new_edges[0]
-        sg_edges[1] += new_edges[1]
+        # sg_edges[0] += new_edges[0]
+        # sg_edges[1] += new_edges[1]
         sg_edges = (sg_edges[0], sg_edges[1])
 
         sg = dgl.graph(sg_edges)
@@ -166,7 +166,6 @@ class xPath(GraphExplainer):
         return sg.to(self.device)
 
     def explain(self, full_model, graph, stkid, beam=5, sample_n=10):
-        target_ntype = self.target_ntype
         dataloader = dgl.dataloading.DataLoader(graph,
                                                         torch.Tensor([stkid]).type(torch.int64).to(self.device),
                                                         self.sampler,

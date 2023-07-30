@@ -93,7 +93,3 @@ class RSRModel(HeterographModel):
             return h, subgraph
         else:
             return h
-
-
-
-
