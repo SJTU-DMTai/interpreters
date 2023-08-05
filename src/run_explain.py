@@ -17,6 +17,7 @@ def load_graph(market, relation_source, data_mix):
     indexs = data_mix.index.levels[1].tolist()
     indexs = list(set(indexs))
     stocks_sorted_list = sorted(indexs)
+    print(stocks_sorted_list)
     print("number of stocks: ", len(stocks_sorted_list))
     stocks_index_dict = {}
     for i, stock in enumerate(stocks_sorted_list):
@@ -134,9 +135,9 @@ def parse_args():
                         choices=["A_share"], help="market name")
     parser.add_argument("--relation_type", type=str, default="stock-stock",
                         choices=["stock-stock", "industry", "full"], help="relation type of graph")
-    parser.add_argument("--graph_model", type=str, default="RSR",
+    parser.add_argument("--graph_model", type=str, default="GAT",
                         choices=["RSR", "GAT", "simpleHGN"], help="graph moddel name")
-    parser.add_argument("--graph_type", type=str, default="heterograph",
+    parser.add_argument("--graph_type", type=str, default="homograph",
                         choices=["heterograph", "homograph"], help="graph type")
     parser.add_argument("--gpu", type=int, default=-1, help="gpu number")
     args = parser.parse_args()
@@ -178,15 +179,15 @@ def run_one_test():
     '''
     stocks = ['SH600000', ]
     # stocks = None
-    start_time = '2017-01-02'
-    end_time = '2017-01-05'
+    start_time = '2021-01-03'
+    end_time = '2021-01-04'
 
     xpath_explainer = xPath(graph_model=args.graph_type, num_layers=1, device=device)
-    # attn_explainer = AttentionX(graph_model=args.graph_type, num_layers=1, device=device)
+    attn_explainer = AttentionX(graph_model=args.graph_type, num_layers=1, device=device)
     # subagraphx_explainer = SubgraphXExplainer(graph_model=args.graph_type, num_layers=1, device=device)
-
+    t1 = time.time()
     explanation = model.get_one_explanation(dataset, stocks, start_time, end_time, xpath_explainer, top_k=3)
-
+    print(f'xpath explanation time: {time.time() - t1}')
     return explanation
 
 

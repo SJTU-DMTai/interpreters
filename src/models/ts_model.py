@@ -367,7 +367,7 @@ class Graphs(nn.Module):
         fidelity = abs(new_pred[newstkid] - pred)
         return fidelity
 
-    def get_explanation(self, dataset, explainer, stocks=None, step_size=10, top_k=5, cached_explanations=None, debug=False):
+    def get_explanation(self, dataset, explainer, stocks=None, step_size=10, top_k=3, cached_explanations=None, debug=False):
         '''
         stocks is a list of stocks that need to be explained. If None, generate explanation for all batch stocks.
         '''
@@ -470,12 +470,18 @@ class Graphs(nn.Module):
 
                 graph_feature = self.model.forward_rnn(feature.float())
                 graph_emb, subgraph = self.model.forward_graph(graph_feature, index, return_subgraph=True)
+                pred = self.model.forward_predictor(graph_feature, graph_emb).detach().cpu().numpy()
                 subgraph.ndata['nfeat'] = graph_feature
 
                 for i, (stkid, stk) in enumerate(index_to_explain):
                     try:
                         id_sub = index.index(stkid)
                         explanation = explainer.explain(self.model, subgraph, id_sub)
+                        # compute the fidelity score
+                        explanation_graph_mask, id_xgraph_mask = explainer.explanation_to_graph(explanation, subgraph,
+                                                                                                id_sub, top_k=top_k)
+                        fidelity_mask = self.get_fidelity(explanation_graph_mask, id_xgraph_mask, pred[id_sub])
+                        
                         if explainer.__class__.__name__ == 'xPath':
                             explanation_sorted = sorted(explanation.items(), key=lambda d: d[1], reverse=True)
                             explanation_orig = explanation_sorted[:top_k] \
