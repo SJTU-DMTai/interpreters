@@ -478,10 +478,14 @@ class Graphs(nn.Module):
                         id_sub = index.index(stkid)
                         explanation = explainer.explain(self.model, subgraph, id_sub)
                         # compute the fidelity score
-                        explanation_graph_mask, id_xgraph_mask = explainer.explanation_to_graph(explanation, subgraph,
-                                                                                                id_sub, top_k=top_k)
+                        explanation_graph_mask, id_xgraph_mask = \
+                            explainer.explanation_to_graph(explanation, subgraph, id_sub, top_k=top_k, maskout=False)
                         fidelity_mask = self.get_fidelity(explanation_graph_mask, id_xgraph_mask, pred[id_sub])
-                        
+                        # compute the fidelity maskout score
+                        explanation_graph_maskout, id_xgraph_maskout = \
+                            explainer.explanation_to_graph(explanation, subgraph, id_sub, top_k=top_k, maskout=True)
+                        fidelity_maskout = self.get_fidelity(explanation_graph_maskout, id_xgraph_maskout, pred[id_sub])
+
                         if explainer.__class__.__name__ == 'xPath':
                             explanation_sorted = sorted(explanation.items(), key=lambda d: d[1], reverse=True)
                             explanation_orig = explanation_sorted[:top_k] \
@@ -508,7 +512,7 @@ class Graphs(nn.Module):
 
                         batch_explanations[stk] = explanation_processed
                     except ValueError:
-                        print(f'stock {stocks[i]} has no neighbors in the graph.')
+                        print(f'stock {stocks[i]} not in index 300.')
                         batch_explanations[stk] = None
                 explanations.append(batch_explanations)
 

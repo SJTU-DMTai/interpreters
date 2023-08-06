@@ -220,13 +220,13 @@ class xPath(GraphExplainer):
             xpath2s[tuple(origin_path_key)] = path2s[path_key]
         return xpath2s
 
-    def explanation_to_graph(self, explanation, subgraph, stkid, top_k=5, maskout=False):
+    def explanation_to_graph(self, explanation, subgraph, stkid, top_k=3, maskout=False):
         keys = list(explanation.keys())
         values = list(explanation.values())
-        if not maskout:
-            ind = np.argsort(values)[-top_k:]
+        if maskout:
+            ind = np.argsort(values, )[:-top_k]
         else:
-            ind = np.argsort(values)[:-top_k]
+            ind = np.argsort(values)[-top_k:]
         paths = [keys[i] for i in ind]
         xnodes = {}
         nodepair = {}
