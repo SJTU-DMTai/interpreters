@@ -1,4 +1,4 @@
-from utils import *
+from dataset.utils import *
 
 DK_I = "infer"
 DK_L = "learn"

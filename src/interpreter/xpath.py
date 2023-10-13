@@ -214,15 +214,27 @@ class xPath(GraphExplainer):
                     ancestor_p.append(b)
                     visited[b] = 1
 
+        # normalize the score of path2s
+        scores = np.array(list(path2s.values()))
+        # scores = (scores - np.min(scores)) / (np.max(scores) - np.min(scores))
+        scores = scores / np.sum(scores)
+        for i in range(len(scores)):
+            path2s[list(path2s.keys())[i]] = int(scores[i] * 100)
+
         xpath2s = {}
+        g_h = dgl.to_homogeneous(g_c)
+        relation_types = ['被增持', '被供应', '被投资', '同涨', '合作', '未知Unknown', '增持', '供应',
+                             '被减持', '竞争', '同跌', '上级', '投资', '纠纷', '减持', '下级', '同行']
         for path_key in path2s:
             origin_path_key = [origin_ids[i] for i in path_key]
-            xpath2s[tuple(origin_path_key)] = path2s[path_key]
+            path_type = g_c.etypes[g_h.edata[dgl.ETYPE][g_h.edge_ids(path_key[1], path_key[0])]]
+            xpath2s[tuple(origin_path_key)] = {'score': path2s[path_key], 'type': relation_types[int(path_type)]}
         return xpath2s
 
     def explanation_to_graph(self, explanation, subgraph, stkid, top_k=3, maskout=False):
         keys = list(explanation.keys())
         values = list(explanation.values())
+        values = [v['score'] for v in values]
         if maskout:
             ind = np.argsort(values, )[:-top_k]
         else:

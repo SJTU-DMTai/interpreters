@@ -32,6 +32,7 @@ def get_all_matrix(market, stocks_index_dict, data_path):
     stocks_num = len(stocks_index_dict)
     relation_As = []
     relation_types = os.listdir(path)
+    # print(relation_types)
     for relation_name in relation_types:
         relation_A = read_one_matrix(
             market, stocks_index_dict, relation_name, data_path
