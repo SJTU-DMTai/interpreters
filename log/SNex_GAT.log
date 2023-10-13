@@ -1,0 +1,37 @@
+----gen1----
+2023-10-10 04:51:57,009 - __init__ - 271 - INFO - model:
+SNex_GAT
+2023-10-10 04:52:07,731 - fit - 426 - INFO - training...
+2023-10-10 04:53:43,800 - fit - 435 - INFO - Epoch0: train loss 0.9958
+2023-10-10 04:55:17,526 - fit - 435 - INFO - Epoch1: train loss 0.9954
+2023-10-10 04:56:53,928 - fit - 435 - INFO - Epoch2: train loss 0.9950
+2023-10-10 04:58:29,298 - fit - 435 - INFO - Epoch3: train loss 0.9940
+2023-10-10 05:00:06,713 - fit - 435 - INFO - Epoch4: train loss 0.9931
+2023-10-10 05:01:40,449 - fit - 435 - INFO - Epoch5: train loss 0.9928
+2023-10-10 05:03:18,307 - fit - 435 - INFO - Epoch6: train loss 0.9922
+2023-10-10 05:04:52,088 - fit - 435 - INFO - Epoch7: train loss 0.9928
+2023-10-10 05:06:30,596 - fit - 435 - INFO - Epoch8: train loss 0.9916
+2023-10-10 05:08:04,805 - fit - 435 - INFO - Epoch9: train loss 0.9910
+2023-10-10 05:09:38,865 - fit - 435 - INFO - Epoch10: train loss 0.9912
+2023-10-10 05:11:12,575 - fit - 435 - INFO - Epoch11: train loss 0.9897
+2023-10-10 05:12:47,806 - fit - 435 - INFO - Epoch12: train loss 0.9897
+2023-10-10 05:14:23,268 - fit - 435 - INFO - Epoch13: train loss 0.9890
+2023-10-10 05:15:57,448 - fit - 435 - INFO - Epoch14: train loss 0.9891
+2023-10-10 05:17:37,125 - fit - 435 - INFO - Epoch15: train loss 0.9878
+2023-10-10 05:19:11,638 - fit - 435 - INFO - Epoch16: train loss 0.9884
+2023-10-10 05:20:46,762 - fit - 435 - INFO - Epoch17: train loss 0.9882
+2023-10-10 05:22:24,004 - fit - 435 - INFO - Epoch18: train loss 0.9872
+2023-10-10 05:23:58,593 - fit - 435 - INFO - Epoch19: train loss 0.9868
+2023-10-10 05:25:33,030 - fit - 435 - INFO - Epoch20: train loss 0.9877
+2023-10-10 05:27:07,019 - fit - 435 - INFO - Epoch21: train loss 0.9860
+2023-10-10 05:28:40,528 - fit - 435 - INFO - Epoch22: train loss 0.9865
+2023-10-10 05:30:18,221 - fit - 435 - INFO - Epoch23: train loss 0.9855
+2023-10-10 05:31:51,374 - fit - 435 - INFO - Epoch24: train loss 0.9853
+2023-10-10 05:33:30,789 - fit - 435 - INFO - Epoch25: train loss 0.9846
+2023-10-10 05:33:30,790 - fit - 446 - INFO - early stop
+2023-10-10 05:33:30,791 - fit - 461 - INFO - evaluating...
+2023-10-10 05:33:49,216 - fit - 463 - INFO - test loss 0.0073, test score -0.0073, test IC 0.0437
+
+----gen----
+2023-10-10 15:36:02,143 - __init__ - 271 - INFO - model:
+SNex_GAT

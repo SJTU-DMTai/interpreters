@@ -4,6 +4,7 @@ import pickle
 import os
 import numpy as np
 import time
+import random
 import logging
 from graph_data import stock_stock_data, stock_concept_data
 from models.ts_model import Graphs
@@ -17,8 +18,8 @@ def load_graph(market, relation_source, data_mix):
     indexs = data_mix.index.levels[1].tolist()
     indexs = list(set(indexs))
     stocks_sorted_list = sorted(indexs)
-    print(stocks_sorted_list)
-    print("number of stocks: ", len(stocks_sorted_list))
+    # print(stocks_sorted_list)
+    # print("number of stocks: ", len(stocks_sorted_list))
     stocks_index_dict = {}
     for i, stock in enumerate(stocks_sorted_list):
         stocks_index_dict[stock] = i
@@ -48,17 +49,17 @@ def load_graph(market, relation_source, data_mix):
 
 def init_logger(log_dir, args):
     os.makedirs(log_dir, exist_ok=True)
-    current_time = time.strftime("%Y-%m-%d-%H-%M", time.localtime())
-    # log_file = log_root + f'/{args.graph_model}_{current_time}.log'
-    # file_handler = logging.FileHandler(log_file)
+    # current_time = time.strftime("%Y-%m-%d-%H-%M", time.localtime())
+    log_file = log_dir + f'/{args.graph_model}.log'
+    file_handler = logging.FileHandler(log_file)
     console_handler = logging.StreamHandler()
     fmt = '%(asctime)s - %(funcName)s - %(lineno)s - %(levelname)s - %(message)s'
     formatter = logging.Formatter(fmt)
-    # file_handler.setFormatter(formatter)
+    file_handler.setFormatter(formatter)
     console_handler.setFormatter(formatter)
     logger = logging.getLogger('updateSecurity')
     logger.setLevel('INFO')
-    # logger.addHandler(file_handler)
+    logger.addHandler(file_handler)
     logger.addHandler(console_handler)
 
     return logger
@@ -71,14 +72,21 @@ def get_model(args, dataset, device):
         data_mix= pickle.load(f)
     rel_encoding, stock_name_list = load_graph(args.market, args.relation_type, data_mix['data'])
     model = Graphs(graph_model=args.graph_model,  # 'GAT' or 'simpleHGN', 'RSR'
-                   d_feat=6, hidden_size=64, num_layers=1, loss="mse", dropout=0.7, n_epochs=100,
-                   metric="loss", base_model="LSTM", use_residual=True, GPU=args.gpu, lr=1e-4,
+                   d_feat=6, hidden_size=64, num_layers=2, loss="mse", dropout=0.7, n_epochs=100,
+                   metric="loss", base_model="LSTM", use_residual=True, GPU=args.gpu, lr=1e-3,
                    early_stop=10, rel_encoding=rel_encoding, stock_name_list=stock_name_list,
-                   num_graph_layer=1, logger=init_logger('../log', args))
+                   num_graph_layer=2, logger=init_logger('../log', args))
     model.to(device)
     model_path = os.path.join(args.ckpt_root, f"{args.market}-{args.graph_model}-{args.graph_type}.pt")
     if os.path.exists(model_path):
         model.load_checkpoint(model_path)
+        df_test = dataset.prepare("test", col_set=["feature", "label"], data_key="infer")
+        x_test, y_test = df_test["feature"], df_test["label"]
+        # test_loss, test_score, test_IC = model.test_epoch(x_test, y_test)
+        # print(f"test loss: {test_loss}, test score: {test_score}, test IC: {test_IC}")
+        print("evaluating...")
+        test_loss, test_IC, test_RIC = model.test_epoch(x_test, y_test)
+        print("test loss %.4f, test IC %.4f, test RIC %.4f" % (test_loss, test_IC, test_RIC))
     else:
         model.fit(dataset, save_path=model_path)
 
@@ -126,7 +134,7 @@ def eval_explanation(explainer, explainer_name, sparsity, step_size):
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Explanation evalaation.")
+    parser = argparse.ArgumentParser(description="Explanation evaluation.")
     parser.add_argument("--data_root", type=str, default="/home/jiale/.qlib/qlib_data/", help="graph_data root path")
     parser.add_argument("--ckpt_root", type=str, default="/home/jiale/interpreters/tmp_ckpt/", help="ckpt root path")
     parser.add_argument("--result_root", type=str, default="/home/jiale/interpreters/results/",
@@ -135,11 +143,13 @@ def parse_args():
                         choices=["A_share"], help="market name")
     parser.add_argument("--relation_type", type=str, default="stock-stock",
                         choices=["stock-stock", "industry", "full"], help="relation type of graph")
-    parser.add_argument("--graph_model", type=str, default="GAT",
-                        choices=["RSR", "GAT", "simpleHGN"], help="graph moddel name")
-    parser.add_argument("--graph_type", type=str, default="homograph",
+    parser.add_argument("--graph_model", type=str, default="RSR",
+                        choices=["RSR", "GAT", "GCN", "simpleHGN",
+                                  "GSAT_RSR", "GSAT_GAT", "GSAT_GCN",
+                                  "SNex_RSR", "SNex_GAT", "SNex_GCN"], help="graph moddel name")
+    parser.add_argument("--graph_type", type=str, default="heterograph",
                         choices=["heterograph", "homograph"], help="graph type")
-    parser.add_argument("--gpu", type=int, default=-1, help="gpu number")
+    parser.add_argument("--gpu", type=int, default=0, help="gpu number")
     args = parser.parse_args()
     return args
 
@@ -180,24 +190,38 @@ def run_one_test():
     stocks = ['SH600000', ]
     # stocks = None
     start_time = '2021-01-03'
-    end_time = '2021-01-04'
+    end_time = '2021-01-08'
 
     xpath_explainer = xPath(graph_model=args.graph_type, num_layers=1, device=device)
     attn_explainer = AttentionX(graph_model=args.graph_type, num_layers=1, device=device)
     # subagraphx_explainer = SubgraphXExplainer(graph_model=args.graph_type, num_layers=1, device=device)
     t1 = time.time()
-    explanation = model.get_one_explanation(dataset, stocks, start_time, end_time, xpath_explainer, top_k=3)
+    explanation = model.get_explanation(dataset, stocks=stocks, start_time=start_time, end_time=end_time, explainer=xpath_explainer, top_k=3)
     print(f'xpath explanation time: {time.time() - t1}')
     return explanation
 
 
+def run_self_explain():
+    pass
+
+
+def setup_seed(seed):
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    np.random.seed(seed)
+    random.seed(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+
+
 if __name__ == '__main__':
+    setup_seed(2023)
     args = parse_args()
     device = torch.device("cuda:%d" % (args.gpu) if torch.cuda.is_available() and args.gpu >= 0 else "cpu")
 
     dataset = get_dataset()
     model = get_model(args, dataset, device)
 
-    run_one_test()
+    # run_one_test()
     # run_all_test()
 

@@ -1,0 +1,142 @@
+----gen1----
+2023-10-10 05:33:57,587 - __init__ - 271 - INFO - model:
+SNex_GCN
+2023-10-10 05:34:08,979 - fit - 426 - INFO - training...
+2023-10-10 05:35:33,950 - fit - 435 - INFO - Epoch0: train loss 0.9951
+2023-10-10 05:36:58,003 - fit - 435 - INFO - Epoch1: train loss 0.9947
+2023-10-10 05:38:21,705 - fit - 435 - INFO - Epoch2: train loss 0.9934
+2023-10-10 05:39:46,195 - fit - 435 - INFO - Epoch3: train loss 0.9925
+2023-10-10 05:41:10,302 - fit - 435 - INFO - Epoch4: train loss 0.9921
+2023-10-10 05:42:35,255 - fit - 435 - INFO - Epoch5: train loss 0.9916
+2023-10-10 05:43:59,003 - fit - 435 - INFO - Epoch6: train loss 0.9918
+2023-10-10 05:45:23,007 - fit - 435 - INFO - Epoch7: train loss 0.9907
+2023-10-10 05:46:47,381 - fit - 435 - INFO - Epoch8: train loss 0.9903
+2023-10-10 05:48:13,747 - fit - 435 - INFO - Epoch9: train loss 0.9897
+2023-10-10 05:49:37,885 - fit - 435 - INFO - Epoch10: train loss 0.9898
+2023-10-10 05:51:02,251 - fit - 435 - INFO - Epoch11: train loss 0.9888
+2023-10-10 05:52:26,041 - fit - 435 - INFO - Epoch12: train loss 0.9883
+2023-10-10 05:53:50,748 - fit - 435 - INFO - Epoch13: train loss 0.9880
+2023-10-10 05:55:15,113 - fit - 435 - INFO - Epoch14: train loss 0.9879
+2023-10-10 05:56:39,063 - fit - 435 - INFO - Epoch15: train loss 0.9866
+2023-10-10 05:58:03,046 - fit - 435 - INFO - Epoch16: train loss 0.9868
+2023-10-10 05:59:27,172 - fit - 435 - INFO - Epoch17: train loss 0.9869
+2023-10-10 06:00:52,097 - fit - 435 - INFO - Epoch18: train loss 0.9854
+2023-10-10 06:02:15,765 - fit - 435 - INFO - Epoch19: train loss 0.9848
+2023-10-10 06:02:15,766 - fit - 446 - INFO - early stop
+2023-10-10 06:02:15,766 - fit - 461 - INFO - evaluating...
+2023-10-10 06:02:34,710 - fit - 463 - INFO - test loss 0.0107, test score -0.0107, test IC 0.0406
+2023-10-10 15:36:42,823 - __init__ - 271 - INFO - model:
+SNex_GCN
+----gen2----
+2023-10-10 15:41:57,616 - __init__ - 271 - INFO - model:
+SNex_GCN
+2023-10-10 15:42:07,988 - fit - 447 - INFO - training...
+2023-10-10 15:43:36,086 - fit - 456 - INFO - Epoch0: train loss 0.9951
+2023-10-10 15:45:03,011 - fit - 456 - INFO - Epoch1: train loss 0.9947
+2023-10-10 15:46:30,417 - fit - 456 - INFO - Epoch2: train loss 0.9935
+2023-10-10 15:47:59,555 - fit - 456 - INFO - Epoch3: train loss 0.9926
+2023-10-10 15:49:26,595 - fit - 456 - INFO - Epoch4: train loss 0.9921
+2023-10-10 15:50:53,231 - fit - 456 - INFO - Epoch5: train loss 0.9917
+2023-10-10 15:52:19,838 - fit - 456 - INFO - Epoch6: train loss 0.9919
+2023-10-10 15:53:47,047 - fit - 456 - INFO - Epoch7: train loss 0.9908
+2023-10-10 15:55:12,711 - fit - 456 - INFO - Epoch8: train loss 0.9903
+2023-10-10 15:56:38,966 - fit - 456 - INFO - Epoch9: train loss 0.9895
+2023-10-10 15:58:05,649 - fit - 456 - INFO - Epoch10: train loss 0.9895
+2023-10-10 15:59:33,551 - fit - 456 - INFO - Epoch11: train loss 0.9883
+2023-10-10 16:01:01,472 - fit - 456 - INFO - Epoch12: train loss 0.9881
+2023-10-10 16:02:30,696 - fit - 456 - INFO - Epoch13: train loss 0.9877
+2023-10-10 16:03:59,217 - fit - 456 - INFO - Epoch14: train loss 0.9876
+2023-10-10 16:05:27,634 - fit - 456 - INFO - Epoch15: train loss 0.9865
+2023-10-10 16:06:54,887 - fit - 456 - INFO - Epoch16: train loss 0.9863
+2023-10-10 16:08:22,292 - fit - 456 - INFO - Epoch17: train loss 0.9876
+2023-10-10 16:09:50,194 - fit - 456 - INFO - Epoch18: train loss 0.9854
+2023-10-10 16:11:16,919 - fit - 456 - INFO - Epoch19: train loss 0.9848
+2023-10-10 16:11:16,919 - fit - 467 - INFO - early stop
+2023-10-10 16:11:16,919 - fit - 482 - INFO - evaluating...
+2023-10-10 16:11:37,560 - fit - 484 - INFO - test loss 0.0115, test IC 0.0409, test RIC 0.0450
+2023-10-10 18:01:53,822 - __init__ - 271 - INFO - model:
+SNex_GCN
+----gen3----
+2023-10-10 18:03:09,201 - __init__ - 271 - INFO - model:
+SNex_GCN
+2023-10-10 18:03:14,596 - fit - 447 - INFO - training...
+2023-10-10 18:04:41,600 - fit - 456 - INFO - Epoch0: train loss 0.9951
+2023-10-10 18:06:08,619 - fit - 456 - INFO - Epoch1: train loss 0.9947
+2023-10-10 18:07:35,864 - fit - 456 - INFO - Epoch2: train loss 0.9935
+2023-10-10 18:09:04,177 - fit - 456 - INFO - Epoch3: train loss 0.9926
+2023-10-10 18:10:30,454 - fit - 456 - INFO - Epoch4: train loss 0.9921
+2023-10-10 18:11:57,101 - fit - 456 - INFO - Epoch5: train loss 0.9914
+2023-10-10 18:13:24,066 - fit - 456 - INFO - Epoch6: train loss 0.9918
+2023-10-10 18:14:51,416 - fit - 456 - INFO - Epoch7: train loss 0.9908
+2023-10-10 18:16:17,333 - fit - 456 - INFO - Epoch8: train loss 0.9902
+2023-10-10 18:17:44,210 - fit - 456 - INFO - Epoch9: train loss 0.9894
+2023-10-10 18:19:10,606 - fit - 456 - INFO - Epoch10: train loss 0.9892
+2023-10-10 18:20:37,729 - fit - 456 - INFO - Epoch11: train loss 0.9883
+2023-10-10 18:22:04,987 - fit - 456 - INFO - Epoch12: train loss 0.9879
+2023-10-10 18:23:32,152 - fit - 456 - INFO - Epoch13: train loss 0.9873
+2023-10-10 18:24:58,135 - fit - 456 - INFO - Epoch14: train loss 0.9876
+2023-10-10 18:26:24,835 - fit - 456 - INFO - Epoch15: train loss 0.9861
+2023-10-10 18:27:51,484 - fit - 456 - INFO - Epoch16: train loss 0.9863
+2023-10-10 18:29:18,233 - fit - 456 - INFO - Epoch17: train loss 0.9872
+2023-10-10 18:30:44,803 - fit - 456 - INFO - Epoch18: train loss 0.9855
+2023-10-10 18:32:10,332 - fit - 456 - INFO - Epoch19: train loss 0.9850
+2023-10-10 18:33:36,759 - fit - 456 - INFO - Epoch20: train loss 0.9845
+2023-10-10 18:33:36,760 - fit - 467 - INFO - early stop
+2023-10-10 18:33:36,760 - fit - 482 - INFO - evaluating...
+2023-10-10 18:33:57,004 - fit - 484 - INFO - test loss 0.0105, test IC 0.0416, test RIC 0.0449
+2023-10-10 18:36:07,589 - __init__ - 271 - INFO - model:
+----gen4----
+SNex_GCN
+2023-10-10 18:36:18,222 - fit - 447 - INFO - training...
+2023-10-10 18:37:47,771 - fit - 456 - INFO - Epoch0: train loss 0.9951
+2023-10-10 18:39:16,108 - fit - 456 - INFO - Epoch1: train loss 0.9947
+2023-10-10 18:40:42,842 - fit - 456 - INFO - Epoch2: train loss 0.9935
+2023-10-10 18:42:12,748 - fit - 456 - INFO - Epoch3: train loss 0.9926
+2023-10-10 18:43:42,562 - fit - 456 - INFO - Epoch4: train loss 0.9921
+2023-10-10 18:45:11,585 - fit - 456 - INFO - Epoch5: train loss 0.9914
+2023-10-10 18:46:39,210 - fit - 456 - INFO - Epoch6: train loss 0.9920
+2023-10-10 18:48:08,157 - fit - 456 - INFO - Epoch7: train loss 0.9911
+2023-10-10 18:49:37,171 - fit - 456 - INFO - Epoch8: train loss 0.9915
+2023-10-10 18:51:05,288 - fit - 456 - INFO - Epoch9: train loss 0.9900
+2023-10-10 18:52:33,347 - fit - 456 - INFO - Epoch10: train loss 0.9895
+2023-10-10 18:54:02,195 - fit - 456 - INFO - Epoch11: train loss 0.9884
+2023-10-10 18:55:29,998 - fit - 456 - INFO - Epoch12: train loss 0.9884
+2023-10-10 18:57:00,542 - fit - 456 - INFO - Epoch13: train loss 0.9876
+2023-10-10 18:58:30,910 - fit - 456 - INFO - Epoch14: train loss 0.9878
+2023-10-10 18:59:57,713 - fit - 456 - INFO - Epoch15: train loss 0.9864
+2023-10-10 19:01:23,788 - fit - 456 - INFO - Epoch16: train loss 0.9865
+2023-10-10 19:02:51,437 - fit - 456 - INFO - Epoch17: train loss 0.9869
+2023-10-10 19:04:19,632 - fit - 456 - INFO - Epoch18: train loss 0.9855
+2023-10-10 19:05:49,560 - fit - 456 - INFO - Epoch19: train loss 0.9849
+2023-10-10 19:05:49,561 - fit - 467 - INFO - early stop
+2023-10-10 19:05:49,561 - fit - 482 - INFO - evaluating...
+2023-10-10 19:06:12,747 - fit - 484 - INFO - test loss 0.0106, test IC 0.0414, test RIC 0.0470
+2023-10-10 19:18:58,900 - __init__ - 271 - INFO - model:
+SNex_GCN
+2023-10-10 19:19:10,069 - fit - 447 - INFO - training...
+2023-10-10 19:20:27,688 - fit - 456 - INFO - Epoch0: train loss 0.9951
+2023-10-10 19:21:45,939 - fit - 456 - INFO - Epoch1: train loss 0.9947
+2023-10-10 19:23:03,356 - fit - 456 - INFO - Epoch2: train loss 0.9935
+2023-10-10 19:24:20,120 - fit - 456 - INFO - Epoch3: train loss 0.9926
+2023-10-10 19:25:34,517 - fit - 456 - INFO - Epoch4: train loss 0.9921
+2023-10-10 19:26:49,824 - fit - 456 - INFO - Epoch5: train loss 0.9914
+2023-10-10 19:28:04,449 - fit - 456 - INFO - Epoch6: train loss 0.9921
+2023-10-10 19:29:19,840 - fit - 456 - INFO - Epoch7: train loss 0.9909
+2023-10-10 19:30:36,299 - fit - 456 - INFO - Epoch8: train loss 0.9911
+2023-10-10 19:31:50,164 - fit - 456 - INFO - Epoch9: train loss 0.9904
+2023-10-10 19:33:08,214 - fit - 456 - INFO - Epoch10: train loss 0.9898
+2023-10-10 19:34:23,719 - fit - 456 - INFO - Epoch11: train loss 0.9885
+2023-10-10 19:35:38,773 - fit - 456 - INFO - Epoch12: train loss 0.9881
+2023-10-10 19:36:54,351 - fit - 456 - INFO - Epoch13: train loss 0.9876
+2023-10-10 19:38:11,878 - fit - 456 - INFO - Epoch14: train loss 0.9876
+2023-10-10 19:39:27,642 - fit - 456 - INFO - Epoch15: train loss 0.9863
+2023-10-10 19:40:46,043 - fit - 456 - INFO - Epoch16: train loss 0.9864
+2023-10-10 19:42:03,791 - fit - 456 - INFO - Epoch17: train loss 0.9869
+2023-10-10 19:43:18,708 - fit - 456 - INFO - Epoch18: train loss 0.9853
+2023-10-10 19:44:34,430 - fit - 456 - INFO - Epoch19: train loss 0.9851
+2023-10-10 19:45:50,887 - fit - 456 - INFO - Epoch20: train loss 0.9846
+2023-10-10 19:45:50,888 - fit - 467 - INFO - early stop
+2023-10-10 19:45:50,888 - fit - 482 - INFO - evaluating...
+2023-10-10 19:46:11,407 - fit - 484 - INFO - test loss 0.0110, test IC 0.0417, test RIC 0.0447
+2023-10-10 22:31:09,869 - __init__ - 271 - INFO - model:
+SNex_GCN

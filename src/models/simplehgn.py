@@ -7,7 +7,7 @@ import dgl
 import dgl.function as fn
 from dgl.nn.pytorch import edge_softmax
 from dgl.nn.pytorch.utils import Identity
-from .graph_model import HeterographModel
+from .graph_model import GraphModel
 
 
 class simpleHeteroGATConv(nn.Module):
@@ -133,7 +133,7 @@ class simpleHeteroGATConv(nn.Module):
             return rst, res_attn
 
 
-class SimpleHeteroHGN(HeterographModel):
+class SimpleHeteroHGN(GraphModel):
     '''
     To implement a model, you need to specify the conv_layers and define forward_graph().
     You may also want to specify fc_out() depending on the graph output.
@@ -141,7 +141,7 @@ class SimpleHeteroHGN(HeterographModel):
     def __init__(self, d_feat, edge_dim, num_etypes, num_hidden, num_layers, dropout,
                  feat_drop,attn_drop,negative_slope,graph_layer_residual,alpha,base_model,num_graph_layer,heads=None, use_residual=False):
         super(SimpleHeteroHGN, self).__init__(
-            base_model=base_model, d_feat=d_feat, hidden_size=num_hidden, num_layers=num_layers, dropout=dropout)
+            base_model=base_model, d_feat=d_feat, hidden_size=num_hidden, num_layers=num_layers, dropout=dropout, is_homogeneous=False)
 
         self.num_layers = num_graph_layer
         self.conv_layers = nn.ModuleList()

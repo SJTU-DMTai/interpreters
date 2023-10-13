@@ -4,7 +4,7 @@ import torch.nn as nn
 import dgl.function as fn
 import dgl
 
-from .graph_model import HeterographModel
+from .graph_model import GraphModel
 from dgl.nn.pytorch import edge_softmax
 
 
@@ -24,7 +24,7 @@ class RSRConv(nn.Module):
         nn.init.xavier_normal_(self.tail_weight.weight, gain=gain)
         nn.init.xavier_normal_(self.rel_weight, gain=gain)
 
-    def forward(self, graph, nfeat, get_attention=False):
+    def forward(self, graph, nfeat, get_attention=False, edge_weight=None):
         with graph.local_scope():
             funcs = {}
             graph.ndata['ft'] = nfeat
@@ -36,7 +36,11 @@ class RSRConv(nn.Module):
                 graph.edges[etype].data["a"] += self.rel_weight[int(etype)]
 
             hg = dgl.to_homogeneous(graph, edata=["a"])
-            a = edge_softmax(hg, hg.edata.pop("a"))
+            if edge_weight is None:
+                a = edge_softmax(hg, hg.edata.pop("a"))
+            else:
+                a = edge_softmax(hg, hg.edata.pop("a")) * edge_weight
+
             e_t = hg.edata['_TYPE']
 
             for src, etype, dst in graph.canonical_etypes:
@@ -53,24 +57,16 @@ class RSRConv(nn.Module):
             return graph.ndata.pop('ft')
 
 
-class RSRModel(HeterographModel):
+class RSRModel(GraphModel):
     '''
         To implement a model, you need to specify the conv_layers and define forward_graph().
         You may also want to specify fc_out() depending on the graph output.
     '''
     def __init__(self, d_feat, hidden_size, num_etypes, num_layers, dropout, base_model, use_residual=False):
-        super().__init__(d_feat=d_feat, hidden_size=hidden_size, num_layers=num_layers, dropout=dropout, base_model=base_model)
-
-        self.hidden_size = hidden_size
-        self.d_feat = d_feat
-        self.use_residual = use_residual
-        if use_residual:
-            self.fc_out = nn.Linear(hidden_size*2, 1)
-        else:
-            self.fc_out = nn.Linear(hidden_size, 1)
-        self.conv_layer = RSRConv(hidden_size, num_etypes)
-
+        super().__init__(d_feat=d_feat, hidden_size=hidden_size, num_layers=num_layers, dropout=dropout,
+                         base_model=base_model, use_residual=use_residual, is_homogeneous=False)
         self.reset_parameters()
+        self.conv_layer = RSRConv(hidden_size, num_etypes)
 
     def reset_parameters(self):
         gain = nn.init.calculate_gain("relu")
@@ -81,13 +77,13 @@ class RSRModel(HeterographModel):
         h, layer_attention = self.conv_layer(graph, h, get_attention=True) # [E,*,H,1]
         return [layer_attention]
 
-    def forward_graph(self, h, index=None, return_subgraph=False):
+    def forward_graph(self, h, index=None, return_subgraph=False, edge_weight=None):
         if index:
             subgraph = dgl.node_subgraph(self.g, index)
         else:
             subgraph = self.g
 
-        h = self.conv_layer(subgraph, h)
+        h = self.conv_layer(subgraph, h, edge_weight=edge_weight)
         h = h.flatten(1)
         if return_subgraph:
             return h, subgraph

@@ -7,8 +7,11 @@ import torch
 import torch.optim as optim
 
 from .gat import GATModel
+from .gcn import GCNModel
 from .simplehgn import SimpleHeteroHGN
 from .rsr import RSRModel
+from .gsat import ExtractorMLP, GSAT
+from .snex import ExtractorMLP, SNex
 
 
 DK_I = "infer"
@@ -78,47 +81,62 @@ class Graphs(nn.Module):
         self.stock_name_list = stock_name_list
         self.num_graph_layer = num_graph_layer
 
-        self.logger.info(
-            "{}s parameters setting:"
-            "\nd_feat : {}"
-            "\nhidden_size : {}"
-            "\nnum_layers : {}"
-            "\ndropout : {}"
-            "\nn_epochs : {}"
-            "\nlr : {}"
-            "\nmetric : {}"
-            "\nearly_stop : {}"
-            "\noptimizer : {}"
-            "\nloss_type : {}"
-            "\nbase_model : {}"
-            "\nmodel_path : {}"
-            "\ndevice : {}"
-            "\nuse_GPU : {}"
-            "\nseed : {}".format(graph_model,
-                                 d_feat,
-                                 hidden_size,
-                                 num_layers,
-                                 dropout,
-                                 n_epochs,
-                                 lr,
-                                 metric,
-                                 early_stop,
-                                 optimizer.lower(),
-                                 loss,
-                                 base_model,
-                                 model_path,
-                                 self.device,
-                                 self.use_gpu,
-                                 seed,
-                                 )
-        )
+        # self.logger.info(
+        #     "{}s parameters setting:"
+        #     "\nd_feat : {}"
+        #     "\nhidden_size : {}"
+        #     "\nnum_layers : {}"
+        #     "\ndropout : {}"
+        #     "\nn_epochs : {}"
+        #     "\nlr : {}"
+        #     "\nmetric : {}"
+        #     "\nearly_stop : {}"
+        #     "\noptimizer : {}"
+        #     "\nloss_type : {}"
+        #     "\nbase_model : {}"
+        #     "\nmodel_path : {}"
+        #     "\ndevice : {}"
+        #     "\nuse_GPU : {}"
+        #     "\nseed : {}".format(graph_model,
+        #                          d_feat,
+        #                          hidden_size,
+        #                          num_layers,
+        #                          dropout,
+        #                          n_epochs,
+        #                          lr,
+        #                          metric,
+        #                          early_stop,
+        #                          optimizer.lower(),
+        #                          loss,
+        #                          base_model,
+        #                          model_path,
+        #                          self.device,
+        #                          self.use_gpu,
+        #                          seed,
+        #                          )
+        # )
 
         if self.seed is not None:
             np.random.seed(self.seed)
             torch.manual_seed(self.seed)
 
+        if self.graph_model[:4] == 'GSAT' or self.graph_model[:4] == 'SNex':
+            self.self_explain = True
+        else:
+            self.self_explain = False
+
         if self.graph_model == 'GAT':
             self.model = GATModel(
+                d_feat=self.d_feat,
+                hidden_size=self.hidden_size,
+                num_layers=self.num_layers,  # RNN layer
+                dropout=self.dropout,
+                base_model=self.base_model,
+                num_graph_layer=self.num_graph_layer,
+                use_residual=use_residual
+            )
+        elif self.graph_model == 'GCN':
+            self.model = GCNModel(
                 d_feat=self.d_feat,
                 hidden_size=self.hidden_size,
                 num_layers=self.num_layers,  # RNN layer
@@ -141,13 +159,114 @@ class Graphs(nn.Module):
                 base_model=self.base_model,
                 num_graph_layer=self.num_graph_layer,
                 # heads = [8]*self.num_graph_layer,
-                use_residual=True
+                use_residual=use_residual
             )
 
         elif self.graph_model == 'RSR':
             self.model = RSRModel(d_feat=self.d_feat, hidden_size=self.hidden_size, num_etypes=rel_encoding.shape[-1],
                                   num_layers=self.num_layers, dropout=self.dropout, base_model=self.base_model,
-                                  use_residual=False)
+                                  use_residual=use_residual)
+        elif self.graph_model == 'GSAT_GAT':
+            clf = GATModel(
+                d_feat=self.d_feat,
+                hidden_size=self.hidden_size,
+                num_layers=self.num_layers,  # RNN layer
+                dropout=self.dropout,
+                base_model=self.base_model,
+                num_graph_layer=self.num_graph_layer,
+                use_residual=use_residual
+            )
+            extractor = ExtractorMLP(hidden_size)
+            self.model = GSAT(clf=clf, extractor=extractor,
+                                 d_feat=self.d_feat,
+                                 hidden_size=self.hidden_size,
+                                 num_layers=self.num_layers,  # RNN layer
+                                 dropout=self.dropout,
+                                 base_model=self.base_model,
+                                 use_residual=use_residual,
+                                 is_homogeneous=True)
+        elif self.graph_model == 'GSAT_GCN':
+            clf = GCNModel(
+                d_feat=self.d_feat,
+                hidden_size=self.hidden_size,
+                num_layers=self.num_layers,  # RNN layer
+                dropout=self.dropout,
+                base_model=self.base_model,
+                num_graph_layer=self.num_graph_layer,
+                use_residual=use_residual
+            )
+            extractor = ExtractorMLP(hidden_size)
+            self.model = GSAT(clf=clf, extractor=extractor,
+                                 d_feat=self.d_feat,
+                                 hidden_size=self.hidden_size,
+                                 num_layers=self.num_layers,  # RNN layer
+                                 dropout=self.dropout,
+                                 base_model=self.base_model,
+                                 use_residual=use_residual,
+                                 is_homogeneous=True)
+        elif self.graph_model == 'GSAT_RSR':
+            clf = RSRModel(d_feat=self.d_feat, hidden_size=self.hidden_size, num_etypes=rel_encoding.shape[-1],
+                                  num_layers=self.num_layers, dropout=self.dropout, base_model=self.base_model,
+                                  use_residual=use_residual)
+            extractor = ExtractorMLP(hidden_size)
+            self.model = GSAT(clf=clf, extractor=extractor,
+                              d_feat=self.d_feat,
+                              hidden_size=self.hidden_size,
+                              num_layers=self.num_layers,  # RNN layer
+                              dropout=self.dropout,
+                              base_model=self.base_model,
+                              use_residual=use_residual,
+                              is_homogeneous=False)
+
+        elif self.graph_model == 'SNex_GAT':
+            encoder = GATModel(
+                d_feat=self.d_feat,
+                hidden_size=self.hidden_size,
+                num_layers=self.num_layers,  # RNN layer
+                dropout=self.dropout,
+                base_model=self.base_model,
+                num_graph_layer=self.num_graph_layer,
+                use_residual=use_residual
+            )
+            extractor = ExtractorMLP(hidden_size)
+            self.model = SNex(encoder=encoder, extractor=extractor,
+                              d_feat=self.d_feat,
+                              hidden_size=self.hidden_size,
+                              num_layers=self.num_layers,  # RNN layer
+                              dropout=self.dropout,
+                              base_model=self.base_model,
+                              use_residual=use_residual)
+        elif self.graph_model == 'SNex_GCN':
+            encoder = GCNModel(
+                d_feat=self.d_feat,
+                hidden_size=self.hidden_size,
+                num_layers=self.num_layers,  # RNN layer
+                dropout=self.dropout,
+                base_model=self.base_model,
+                num_graph_layer=self.num_graph_layer,
+                use_residual=use_residual
+            )
+            extractor = ExtractorMLP(hidden_size)
+            self.model = SNex(encoder=encoder, extractor=extractor,
+                              d_feat=self.d_feat,
+                              hidden_size=self.hidden_size,
+                              num_layers=self.num_layers,  # RNN layer
+                              dropout=self.dropout,
+                              base_model=self.base_model,
+                              use_residual=use_residual)
+        elif self.graph_model == 'SNex_RSR':
+            encoder = RSRModel(d_feat=self.d_feat, hidden_size=self.hidden_size, num_etypes=rel_encoding.shape[-1],
+                                  num_layers=self.num_layers, dropout=self.dropout, base_model=self.base_model,
+                                  use_residual=use_residual)
+            extractor = ExtractorMLP(hidden_size)
+            self.model = SNex(encoder=encoder, extractor=extractor,
+                              d_feat=self.d_feat,
+                              hidden_size=self.hidden_size,
+                              num_layers=self.num_layers,  # RNN layer
+                              dropout=self.dropout,
+                              base_model=self.base_model,
+                              use_residual=use_residual,
+                              is_homogeneous=False)
 
         self.logger.info("model:\n{:}".format(self.graph_model))
 
@@ -192,7 +311,25 @@ class Graphs(nn.Module):
         pd_prediction = pd.Series(prediction.detach().cpu().numpy().squeeze())
         return pd_prediction.corr(pd_label)
 
-    def get_daily_inter(self, df, shuffle=False, step_size=1):
+    def cal_my_RIC(self, prediction, label):
+        pd_label = pd.Series(label.detach().cpu().numpy().squeeze())
+        pd_prediction = pd.Series(prediction.detach().cpu().numpy().squeeze())
+        return pd_prediction.corr(pd_label, method="spearman")
+
+    def cal_my_metrics(self, prediction, label):
+        pd_label = pd.Series(label.detach().cpu().numpy().squeeze())
+        pd_prediction = pd.Series(prediction.detach().cpu().numpy().squeeze())
+        ic = pd_prediction.corr(pd_label)
+        ric = pd_prediction.corr(pd_label, method="spearman")
+        metrics = {
+            "IC": ic.mean(),
+            "ICIR": ic.mean() / ic.std(),
+            "Rank IC": ric.mean(),
+            "Rank ICIR": ric.mean() / ric.std(),
+        }
+        return metrics
+
+    def get_daily_iter(self, df, shuffle=False, step_size=1):
         # organize the train data into daily batches
         daily_count = df.groupby(level=0).size().values
         daily_index = np.roll(np.cumsum(daily_count), 1)
@@ -216,12 +353,12 @@ class Graphs(nn.Module):
 
         return daily_index, daily_count, stocks_daily
 
-    def train_epoch(self, x_train, y_train):
+    def train_epoch(self, x_train, y_train, epoch):
         self.model.train()
         x_train_values = x_train.values
         y_train_values = np.squeeze(y_train.values)
 
-        daily_index, daily_count, stocks_daily = self.get_daily_inter(x_train, shuffle=True)
+        daily_index, daily_count, stocks_daily = self.get_daily_iter(x_train, shuffle=True)
 
         for idx, count, stks in zip(daily_index, daily_count, stocks_daily):
             index = [self.stock_name_list.index(stk) for stk in stks]
@@ -229,8 +366,17 @@ class Graphs(nn.Module):
             feature = torch.from_numpy(x_train_values[batch]).float().to(self.device)
             label = torch.from_numpy(y_train_values[batch]).float().to(self.device)
 
-            pred = self.model(feature.float(), index)
-            loss = self.loss_fn(pred, label)
+            if self.graph_model[:4] == 'GSAT':
+                pred, att = self.model(feature.float(), index)
+                info_loss = self.model.info_loss(att, epoch)
+                loss = self.loss_fn(pred, label) + info_loss
+            elif self.graph_model[:4] == 'SNex':
+                pred, (att, anchor_emb) = self.model(feature.float(), index)
+                cts_loss = self.model.loss(anchor_emb, att, epoch)
+                loss = self.loss_fn(pred, label) + cts_loss
+            else:
+                pred = self.model(feature.float(), index)
+                loss = self.loss_fn(pred, label)
 
             self.train_optimizer.zero_grad()
             loss.backward()
@@ -246,8 +392,9 @@ class Graphs(nn.Module):
         scores = []
         losses = []
         my_ICs = []
+        my_RICs = []
         # organize the test data into daily batches
-        daily_index, daily_count, stocks_daily = self.get_daily_inter(data_x, shuffle=False)
+        daily_index, daily_count, stocks_daily = self.get_daily_iter(data_x, shuffle=False)
 
         for idx, count, stks in zip(daily_index, daily_count, stocks_daily):
             index = [self.stock_name_list.index(stk) for stk in stks]
@@ -256,23 +403,22 @@ class Graphs(nn.Module):
             label = torch.from_numpy(y_values[batch]).float().to(self.device)
 
             with torch.no_grad():
-                pred = self.model(feature.float(), index)
+                if self.self_explain:
+                    pred, _ = self.model(feature.float(), index, training=False)
+                else:
+                    pred = self.model(feature.float(), index)
             loss = self.loss_fn(pred, label)
             losses.append(loss.item())
             IC = self.cal_my_IC(pred, label)
+            RIC = self.cal_my_RIC(pred, label)
             my_ICs.append(IC)
+            my_RICs.append(RIC)
 
-            score = self.metric_fn(pred, label)
-            scores.append(score.item())
-        return np.nanmean(losses), np.nanmean(scores), np.nanmean(my_ICs)
+            # score = self.metric_fn(pred, label)
+            # scores.append(score.item())
+        return np.nanmean(losses), np.nanmean(my_ICs), np.nanmean(my_RICs)
 
-    def fit(
-            self,
-            dataset,
-            evals_result=dict(),
-            save_path=None,
-    ):
-
+    def fit(self, dataset, evals_result=dict(), save_path=None):
         df_train, df_valid = dataset.prepare(
             ["train", "valid"],
             col_set=["feature", "label"],
@@ -302,30 +448,41 @@ class Graphs(nn.Module):
         self.fitted = True
 
         for step in range(self.n_epochs):
-            self.logger.info("Epoch%d:", step)
-            self.logger.info("training...")
-            self.train_epoch(x_train, y_train)
-            self.logger.info("evaluating...")
+            # self.logger.info("Epoch%d:", step)
+            # self.logger.info("training...")
+            self.train_epoch(x_train, y_train, step)
+            # self.logger.info("evaluating...")
             train_loss, train_score, train_IC = self.test_epoch(x_train, y_train)
-            val_loss, val_score, val_IC = self.test_epoch(x_valid, y_valid)
-            test_loss, test_score, test_IC = self.test_epoch(x_test, y_test)
-            self.logger.info("train %.6f, valid %.6f, test %.4f" % (train_score, val_score, test_score))
-            self.logger.info("train IC %.6f, valid IC %.6f, test IC %.4f" % (train_IC, val_IC, test_IC))
+            self.logger.info("Epoch%d: train loss %.4f" % (step, train_loss))
+            # val_loss, val_score, val_IC = self.test_epoch(x_valid, y_valid)
+            # test_loss, test_score, test_IC = self.test_epoch(x_test, y_test)
+            # self.logger.info("train loss %.6f, valid loss %.6f, test loss %.4f" % (train_loss, val_loss, test_loss))
+            # self.logger.info("train %.6f, valid %.6f, test %.4f" % (train_score, val_score, test_score))
+            # self.logger.info("train IC %.6f, valid IC %.6f, test IC %.4f" % (train_IC, val_IC, test_IC))
             evals_result["train"].append(train_score)
-            evals_result["valid"].append(val_score)
+            # evals_result["valid"].append(val_score)
 
-            if val_score > best_score:
-                best_score = val_score
-                stop_steps = 0
-                best_epoch = step
+            if train_loss < 0.985:
                 best_param = copy.deepcopy(self.model.state_dict())
-            else:
-                stop_steps += 1
-                if stop_steps >= self.early_stop:
-                    self.logger.info("early stop")
-                    break
+                self.logger.info("early stop")
+                break
 
-        self.logger.info("best score: %.6lf @ %d" % (best_score, best_epoch))
+            # if val_score > best_score:
+            #     best_score = val_score
+            #     stop_steps = 0
+            #     best_epoch = step
+            #     best_param = copy.deepcopy(self.model.state_dict())
+            # else:
+            #     stop_steps += 1
+            #     if stop_steps >= self.early_stop:
+            #         self.logger.info("early stop")
+            #         break
+
+        # self.logger.info("best score: %.6lf @ %d" % (best_score, best_epoch))
+        self.logger.info("evaluating...")
+        test_loss, test_IC, test_RIC = self.test_epoch(x_test, y_test)
+        self.logger.info("test loss %.4f, test IC %.4f, test RIC %.4f" % (test_loss, test_IC, test_RIC))
+        # print(f"test loss: {test_loss}, test score: {test_score}, test IC: {test_IC}")
         self.model.load_state_dict(best_param)
         torch.save(best_param, save_path)
 
@@ -347,7 +504,7 @@ class Graphs(nn.Module):
         x_values = x_test.values
         preds = []
 
-        daily_index, daily_count, stocks_daily = self.get_daily_inter(x_test, shuffle=False)
+        daily_index, daily_count, stocks_daily = self.get_daily_iter(x_test, shuffle=False)
 
         for idx, count, stks in zip(daily_index, daily_count, stocks_daily):
             index = [self.stock_name_list.index(stk) for stk in stks]
@@ -367,14 +524,18 @@ class Graphs(nn.Module):
         fidelity = abs(new_pred[newstkid] - pred)
         return fidelity
 
-    def get_explanation(self, dataset, explainer, stocks=None, step_size=10, top_k=3, cached_explanations=None, debug=False):
+    def get_explanation(self, dataset, explainer, start_time, end_time, stocks=None, step_size=10, top_k=3, cached_explanations=None, debug=False):
         '''
         stocks is a list of stocks that need to be explained. If None, generate explanation for all batch stocks.
         '''
-        x_test = dataset.prepare('explain', col_set="feature", data_key=DK_I)
+        # x_test = dataset.prepare('explain', col_set="feature", data_key=DK_I)
+        # self.model.eval()
+        # x_values = x_test.values
+        # daily_index, daily_count, stocks_daily = self.get_daily_inter(x_test, shuffle=False, step_size=step_size)
+        x_explain = dataset.prepare_seg((start_time, end_time), col_set='feature', level='datetime', data_key=DK_I)
         self.model.eval()
-        x_values = x_test.values
-        daily_index, daily_count, stocks_daily = self.get_daily_inter(x_test, shuffle=False, step_size=step_size)
+        x_values = x_explain.values
+        daily_index, daily_count, stocks_daily = self.get_daily_iter(x_explain, shuffle=False, step_size=1)
         explanations = []
         scores_mask = []
         xsize = []
@@ -448,7 +609,7 @@ class Graphs(nn.Module):
         x_explain = dataset.prepare_seg((start_time, end_time), col_set='feature', level='datetime', data_key=DK_I)
         self.model.eval()
         x_values = x_explain.values
-        daily_index, daily_count, stocks_daily = self.get_daily_inter(x_explain, shuffle=False, step_size=1)
+        daily_index, daily_count, stocks_daily = self.get_daily_iter(x_explain, shuffle=False, step_size=1)
         explanations = []
 
         for i, (idx, count, stks) in enumerate(zip(daily_index, daily_count, stocks_daily)):
@@ -480,6 +641,8 @@ class Graphs(nn.Module):
                         # compute the fidelity score
                         explanation_graph_mask, id_xgraph_mask = \
                             explainer.explanation_to_graph(explanation, subgraph, id_sub, top_k=top_k, maskout=False)
+                        # print(f'# edges in the original graph: {subgraph.number_of_edges()}\n '
+                        #       f'# edges in the explanation graph: {explanation_graph_mask.number_of_edges()}')
                         fidelity_mask = self.get_fidelity(explanation_graph_mask, id_xgraph_mask, pred[id_sub])
                         # compute the fidelity maskout score
                         explanation_graph_maskout, id_xgraph_maskout = \

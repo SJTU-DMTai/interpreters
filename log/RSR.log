@@ -1,0 +1,36 @@
+2023-10-09 20:26:48,238 - __init__ - 271 - INFO - model:
+RSR
+2023-10-09 20:26:58,413 - fit - 426 - INFO - training...
+2023-10-09 20:29:16,806 - fit - 435 - INFO - Epoch0: train loss 0.9950
+2023-10-09 20:31:34,328 - fit - 435 - INFO - Epoch1: train loss 0.9947
+2023-10-09 20:33:52,723 - fit - 435 - INFO - Epoch2: train loss 0.9941
+2023-10-09 20:36:08,734 - fit - 435 - INFO - Epoch3: train loss 0.9927
+2023-10-09 20:38:25,574 - fit - 435 - INFO - Epoch4: train loss 0.9923
+2023-10-09 20:40:44,752 - fit - 435 - INFO - Epoch5: train loss 0.9914
+2023-10-09 20:43:05,227 - fit - 435 - INFO - Epoch6: train loss 0.9912
+2023-10-09 20:45:24,163 - fit - 435 - INFO - Epoch7: train loss 0.9907
+2023-10-09 20:47:42,543 - fit - 435 - INFO - Epoch8: train loss 0.9902
+2023-10-09 20:49:58,202 - fit - 435 - INFO - Epoch9: train loss 0.9895
+2023-10-09 20:52:13,922 - fit - 435 - INFO - Epoch10: train loss 0.9890
+2023-10-09 20:54:34,573 - fit - 435 - INFO - Epoch11: train loss 0.9880
+2023-10-09 20:56:50,614 - fit - 435 - INFO - Epoch12: train loss 0.9880
+2023-10-09 20:59:07,851 - fit - 435 - INFO - Epoch13: train loss 0.9873
+2023-10-09 21:01:24,942 - fit - 435 - INFO - Epoch14: train loss 0.9875
+2023-10-09 21:03:44,266 - fit - 435 - INFO - Epoch15: train loss 0.9859
+2023-10-09 21:06:05,501 - fit - 435 - INFO - Epoch16: train loss 0.9863
+2023-10-09 21:08:24,827 - fit - 435 - INFO - Epoch17: train loss 0.9860
+2023-10-09 21:10:44,003 - fit - 435 - INFO - Epoch18: train loss 0.9852
+2023-10-09 21:13:05,627 - fit - 435 - INFO - Epoch19: train loss 0.9847
+2023-10-09 21:13:05,629 - fit - 446 - INFO - early stop
+2023-10-09 21:13:05,629 - fit - 461 - INFO - evaluating...
+test loss: 0.012057435669223675, test score: -0.012057435669223675, test IC: 0.0399626427014952023-10-10 15:23:04,746 - __init__ - 271 - INFO - model:
+RSR
+2023-10-10 15:24:20,695 - __init__ - 271 - INFO - model:
+RSR
+2023-10-10 15:25:04,003 - __init__ - 271 - INFO - model:
+RSR
+2023-10-10 15:25:16,367 - fit - 447 - INFO - training...
+2023-10-10 15:27:12,042 - __init__ - 271 - INFO - model:
+RSR
+2023-10-10 15:27:57,339 - __init__ - 271 - INFO - model:
+RSR

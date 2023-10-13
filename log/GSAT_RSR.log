@@ -1,0 +1,27 @@
+2023-10-09 22:55:13,992 - __init__ - 271 - INFO - model:
+GSAT_RSR
+2023-10-09 22:55:28,788 - fit - 426 - INFO - training...
+2023-10-09 23:00:24,586 - fit - 435 - INFO - Epoch0: train loss 0.9954
+2023-10-09 23:05:17,198 - fit - 435 - INFO - Epoch1: train loss 0.9945
+2023-10-09 23:10:10,275 - fit - 435 - INFO - Epoch2: train loss 0.9943
+2023-10-09 23:15:04,472 - fit - 435 - INFO - Epoch3: train loss 0.9932
+2023-10-09 23:20:04,390 - fit - 435 - INFO - Epoch4: train loss 0.9921
+2023-10-09 23:25:11,088 - fit - 435 - INFO - Epoch5: train loss 0.9914
+2023-10-09 23:30:05,721 - fit - 435 - INFO - Epoch6: train loss 0.9907
+2023-10-09 23:35:04,256 - fit - 435 - INFO - Epoch7: train loss 0.9902
+2023-10-09 23:40:02,142 - fit - 435 - INFO - Epoch8: train loss 0.9895
+2023-10-09 23:44:58,167 - fit - 435 - INFO - Epoch9: train loss 0.9885
+2023-10-09 23:50:03,094 - fit - 435 - INFO - Epoch10: train loss 0.9888
+2023-10-09 23:55:03,674 - fit - 435 - INFO - Epoch11: train loss 0.9877
+2023-10-10 00:00:03,398 - fit - 435 - INFO - Epoch12: train loss 0.9878
+2023-10-10 00:05:03,199 - fit - 435 - INFO - Epoch13: train loss 0.9870
+2023-10-10 00:09:55,755 - fit - 435 - INFO - Epoch14: train loss 0.9867
+2023-10-10 00:14:53,761 - fit - 435 - INFO - Epoch15: train loss 0.9851
+2023-10-10 00:19:55,018 - fit - 435 - INFO - Epoch16: train loss 0.9860
+2023-10-10 00:24:54,146 - fit - 435 - INFO - Epoch17: train loss 0.9858
+2023-10-10 00:29:51,058 - fit - 435 - INFO - Epoch18: train loss 0.9844
+2023-10-10 00:29:51,060 - fit - 446 - INFO - early stop
+2023-10-10 00:29:51,060 - fit - 461 - INFO - evaluating...
+2023-10-10 00:31:46,238 - fit - 463 - INFO - test loss 0.0086, test score -0.0086, test IC 0.0403
+2023-10-10 15:30:24,725 - __init__ - 271 - INFO - model:
+GSAT_RSR
